@@ -23,7 +23,7 @@ services:
     networks:
       - backend 
   glpi_web:
-    container_name: glpi_web
+    container_name: glpi-server
     build: ./web/.
     image: server_server:latest
     restart: always
@@ -31,9 +31,9 @@ services:
     deploy:
       replicas: 3
     links:
-      - glpi_db
+      - mysql_glpi
     depends_on:
-      - glpi_db
+      - mysql_glpi
     volumes:
     - /home/darling/glpi/:/var/www/html/   
     ports:
@@ -48,9 +48,9 @@ services:
     deploy:
       replicas: 1
     depends_on:
-      - glpi_db
+      - mysql_glpi
     links:
-      - glpi_db
+      - mysql_glpi
     ports:
       - 8080:80
     environment:

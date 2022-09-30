@@ -12,6 +12,7 @@ echo ""
 echo ""
 echo " -* Preparando o Sistema para receber o Cluster GLPI *-"
 echo ""
+sleep 5
 echo "Atualizando a base e a estrutura do sistema operacional"
 apt-get update -y && apt-get upgrade -y
 echo ""
@@ -29,6 +30,9 @@ curl -SL https://github.com/docker/compose/releases/download/v2.11.2/docker-comp
 echo ""
 echo "Atribuindo permissao ao docker-compose"
 chmod +x /usr/bin/docker-compose 
+echo ""
+echo "Inicializando o swarm do docker"
+docker swarm init
 echo ""
 echo "Criando os diretorios" 
 mkdir -p /home/darling/mysql/
@@ -49,7 +53,7 @@ echo ""
 echo "Aplicando permissões necessarias"
 chmod -R  777 /home/darling/glpi/config/
 chmod -R  777 /home/darling/glpi/files/
-chmod -R  777 /home/darling/glpi/marketing/
+chmod -R  777 /home/darling/glpi/imarketplace/
 rm -rf /home/darling/glpi/glpi*
 cd /home/darling/glpi-server/
 echo ""
@@ -64,24 +68,17 @@ systemctl disable apach2.service
 echo ""
 echo "Verificando o status do Apache2"
 /etc/init.d/apache2 status
+sleep 5
 echo ""
 echo "Criando o Cluster GLPI - HSP"
 docker stack deploy --compose-file /home/darling/glpi-server/docker-compose.yml up
 echo ""
-echo " -* Iniciar a exportação do banco de Dados *-"
+echo "Etapas Manuais"
+read etapa1
+echo "Faça  backup do banco do Glpi Manualmente"
+read etapa2
+echo "Restaurar o Backup do Glpi do banco"
+read etapa3
 echo ""
-echo "Informe o nome do banco de dados do glpi"
-read nomedobanco
-mysqldump -u root -p $nomedobanco > /home/darling/glpi-server/glpi_backup.sql
-echo ""
-echo "Verificando tamanho do arquivo gerado"
-du -h /home/darling/glpi-server/glpi_backup.sql
-echo ""
-echo " -* Importar backup da base de dados  glpi atualizado -*"
-echo ""
-echo "Informe o nome do container a receber a base de dados:"
-read nomecontainer
-docker exec -it up_mysql mysql -u root -p'Inf9ra5bas7e#hps-user' glpi-dbd-user < /home/darling/glpi-server/glpi_backup.sql $nomecontainer
-echo ""
-echo "Abra o navegador no Ip do Servidor"
-echo ""
+echo "Acessar a pagina do IP do servidor e configurar a interface Web"
+echo
