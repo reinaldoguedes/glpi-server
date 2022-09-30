@@ -1,54 +1,87 @@
 #!/bin/bash
+echo "###################################################################"
+echo "#                                                                 #"
+echo "#  - Sistema de Update GLPI de Bare-Metal para Cluster Docker  -  #"
+echo "#                                                                 #"
+echo "#              Desenvolvido por CNSoltuions - LTDA                #"
+echo "#                                                                 #"
+echo "#         e-mail: reinaldoguedes@cnsolutions.com.br               #"
+echo "#                                                                 #"
+echo "###################################################################"
+echo ""
+echo ""
+echo " -* Preparando o Sistema para receber o Cluster GLPI *-"
+echo ""
 echo "Atualizando a base e a estrutura do sistema operacional"
 apt-get update -y && apt-get upgrade -y
 echo ""
-clear
 echo "Baixando o docker"
 curl -fsSL https://get.docker.com -o get.docker.sh
 echo "" 
-clear
 echo "Instalando o docker"
 sh get.docker.sh 
 echo ""
-clear
 echo "Testando o docker" 
 docker run hello-world
 echo ""
-clear
 echo "Baixando o docker compose"
 curl -SL https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64 -o /usr/bin/docker-compose
 echo ""
-clear
 echo "Atribuindo permissao ao docker-compose"
 chmod +x /usr/bin/docker-compose 
 echo ""
-clear
 echo "Criando os diretorios" 
 mkdir -p /home/darling/mysql/
 mkdir -p /home/darling/glpi/
 cd /home/darling/glpi/
 echo ""
+sleep 5
 clear
+echo " -* Iniciando as etapas da criação do cluster *-"
+echo ""
 echo "Fazendo download da aplicação do glpi 10.0.3"
 wget https://github.com/glpi-project/glpi/releases/download/10.0.3/glpi-10.0.3.tgz
+echo ""
 echo "Extraindo arquivos da Aplicação"
 tar -xzvf /home/darling/glpi/glpi-10.0.3.tgz
 mv /home/darling/glpi/glpi/* /home/darling/glpi/.
+echo ""
 echo "Aplicando permissões necessarias"
 chmod -R  777 /home/darling/glpi/config/
 chmod -R  777 /home/darling/glpi/files/
 chmod -R  777 /home/darling/glpi/marketing/
 rm -rf /home/darling/glpi/glpi*
 cd /home/darling/glpi-server/
-"Criando os containers do GLPI - MYSQL - PHPADMIN"
-docker-compose up -d
-ehco "Insira o arquivo de backup de banco atualizado no diretorio: /home/darling/glpi-server com nome: glpi_backup.sql"
-read confirma
-echo "Confirme o diretorio do arquivo e nome do arquivo"
-read confirma
 echo ""
-echo "Importando backup do glpi atualizado"
-mysql -u root -p'Inf9ra5bas7e#hps-user' glpi-db-user < /home/darling/glpi-server/glpi_backup.sql 
+echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
+docker-compose build
+echo ""
+echo "Parando o serviço do Apache2 Atual"
+/etc/init.d/apache2 stop
+echo ""
+echo "Desativando o apache2 da inicialização"
+systemctl disable apach2.service
+echo ""
+echo "Verificando o status do Apache2"
+/etc/init.d/apache2 status
+echo ""
+echo "Criando o Cluster GLPI - HSP"
+docker stack deploy --compose-file /home/darling/glpi-server/docker-compose.yml up
+echo ""
+echo " -* Iniciar a exportação do banco de Dados *-"
+echo ""
+echo "Informe o nome do banco de dados do glpi"
+read nomedobanco
+mysqldump -u root -p $nomedobanco > /home/darling/glpi-server/glpi_backup.sql
+echo ""
+echo "Verificando tamanho do arquivo gerado"
+du -h /home/darling/glpi-server/glpi_backup.sql
+echo ""
+echo " -* Importar backup da base de dados  glpi atualizado -*"
+echo ""
+echo "Informe o nome do container a receber a base de dados:"
+read nomecontainer
+docker exec -it up_mysql mysql -u root -p'Inf9ra5bas7e#hps-user' glpi-dbd-user < /home/darling/glpi-server/glpi_backup.sql $nomecontainer
 echo ""
 echo "Abra o navegador no Ip do Servidor"
-echo "
+echo ""
