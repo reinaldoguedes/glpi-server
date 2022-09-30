@@ -53,7 +53,7 @@ echo ""
 echo "Aplicando permissões necessarias"
 chmod -R  777 /home/darling/glpi/config/
 chmod -R  777 /home/darling/glpi/files/
-chmod -R  777 /home/darling/glpi/imarketplace/
+chmod -R  777 /home/darling/glpi/marketplace/
 rm -rf /home/darling/glpi/glpi*
 cd /home/darling/glpi-server/
 echo ""
@@ -64,7 +64,7 @@ echo "Parando o serviço do Apache2 Atual"
 /etc/init.d/apache2 stop
 echo ""
 echo "Desativando o apache2 da inicialização"
-systemctl disable apach2.service
+systemctl disable apache2.service
 echo ""
 echo "Verificando o status do Apache2"
 /etc/init.d/apache2 status
