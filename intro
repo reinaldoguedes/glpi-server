@@ -1,0 +1,13 @@
+intro () {
+clear
+echo "###################################################################"
+echo "#                                                                 #"
+echo "#      - Sistema de Instalação dp Glpi em Cluster Docker  -       #"
+echo "#                                                                 #"
+echo "#              Desenvolvido por CNSoltuions - LTDA                #"
+echo "#                                                                 #"
+echo "#         e-mail: reinaldoguedes@cnsolutions.com.br               #"
+echo "#                                                                 #"
+echo "###################################################################"
+echo ""
+}

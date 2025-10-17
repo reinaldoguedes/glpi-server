@@ -1,0 +1,20 @@
+prepcluster () {
+clear
+echo " -* Iniciando as etapas da criação do cluster *-"
+echo ""
+echo "Fazendo download da aplicação do glpi 11.0.1"
+echo ""
+wget https://github.com/glpi-project/glpi/releases/download/11.0.1/glpi-11.0.1.tgz
+echo ""
+echo "Extraindo arquivos da Aplicação"
+tar -xzvf ~/glpi-server/glpi*.tgz
+sudo mv  /home/$userdir/glpi-server/glpi/* /var/lib/docker/volumes/glpi_webdir/_data/.
+echo ""
+echo "Aplicando permissões necessarias"
+echo ""
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/config/
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/files/
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/marketplace/
+sudo rm -rf ~/glpi-server/glpi*
+cd ~/glpi-server/
+}

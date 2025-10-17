@@ -1,0 +1,46 @@
+insta_docker (){
+echo "Para iniciar a instalacao, informe o usuario atual"
+read userdir
+echo ""
+echo " -* Preparando o Sistema para receber o Cluster GLPI *-"
+echo ""
+sleep 5
+clear
+echo "Atualizando a base e a estrutura do sistema operacional"
+echo ""
+sudo apt-get update -y && apt-get upgrade -y
+echo ""
+sleep 3
+clear
+echo "Instalando o docker"
+echo ""
+sudo curl -fsSL https://get.docker.com/ | sh
+echo ""
+sleep 3
+clear
+echo "Testando o docker"
+echo ""
+sudo docker run hello-world
+echo ""
+sleep 3
+clear
+echo "Instalando o docker compose"
+echo ""
+sudo apt-get install docker-compose -y
+echo ""
+sleep 3
+clear
+echo "Inicializando o swarm do docker"
+echo ""
+sudo docker swarm init
+sleep 3
+echo ""
+#sleep 3
+echo ""
+clear
+echo "Criando Volumes do Container Webdir"
+echo ""
+sudo docker volume create glpi_webdir
+echo ""
+sleep 5
+}
