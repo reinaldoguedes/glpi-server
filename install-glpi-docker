@@ -16,69 +16,46 @@ sleep 5
 echo "Atualizando a base e a estrutura do sistema operacional"
 apt-get update -y && apt-get upgrade -y
 echo ""
-echo "Baixando o docker"
-curl -fsSL https://get.docker.com -o get.docker.sh
-echo "" 
 echo "Instalando o docker"
-sh get.docker.sh 
-echo ""
+curl -fsSL https://get.docker.com/ | sh
+echo "" 
 echo "Testando o docker" 
 docker run hello-world
 echo ""
 echo "Baixando o docker compose"
-curl -SL https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64 -o /usr/bin/docker-compose
-echo ""
-echo "Atribuindo permissao ao docker-compose"
-chmod +x /usr/bin/docker-compose 
+sudo apt-get install docker-compose -y
 echo ""
 echo "Inicializando o swarm do docker"
 docker swarm init
 echo ""
 echo "Criando os diretorios" 
-mkdir -p /home/darling/mysql/
-mkdir -p /home/darling/glpi/
-cd /home/darling/glpi/
+mkdir -p ~/mysql/
+mkdir -p ~/glpi/
+cd ~/glpi/
 echo ""
 sleep 5
 clear
 echo " -* Iniciando as etapas da criação do cluster *-"
 echo ""
-echo "Fazendo download da aplicação do glpi 10.0.3"
-wget https://github.com/glpi-project/glpi/releases/download/10.0.3/glpi-10.0.3.tgz
+echo "Fazendo download da aplicação do glpi 11.0.1"
+wget https://github.com/glpi-project/glpi/releases/download/11.0.1/glpi-11.0.1.tgz
 echo ""
 echo "Extraindo arquivos da Aplicação"
-tar -xzvf /home/darling/glpi/glpi-10.0.3.tgz
-mv /home/darling/glpi/glpi/* /home/darling/glpi/.
+tar -xzvf ~/glpi/glpi*.tgz
+mv ~/glpi/glpi/* ~/glpi/.
 echo ""
 echo "Aplicando permissões necessarias"
-chmod -R  777 /home/darling/glpi/config/
-chmod -R  777 /home/darling/glpi/files/
-chmod -R  777 /home/darling/glpi/marketplace/
-rm -rf /home/darling/glpi/glpi*
-cd /home/darling/glpi-server/
+chmod -R  777 ~/glpi/config/
+chmod -R  777 ~/glpi/files/
+chmod -R  777 ~/glpi/marketplace/
+rm -rf ~/glpi/glpi*
+cd ~/glpi-server/
 echo ""
 echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
 docker-compose build
 echo ""
-echo "Parando o serviço do Apache2 Atual"
-/etc/init.d/apache2 stop
-echo ""
-echo "Desativando o apache2 da inicialização"
-systemctl disable apache2.service
-echo ""
-echo "Verificando o status do Apache2"
-/etc/init.d/apache2 status
-sleep 5
-echo ""
-echo "Criando o Cluster GLPI - HSP"
-docker stack deploy --compose-file /home/darling/glpi-server/docker-compose.yml up
-echo ""
-echo "Etapas Manuais"
-read etapa1
-echo "Faça  backup do banco do Glpi Manualmente"
-read etapa2
-echo "Restaurar o Backup do Glpi do banco"
-read etapa3
+echo "Criando o Cluster GLPI"
+docker stack deploy --compose-file ~/glpi-server/docker-compose.yml up
 echo ""
 echo "Acessar a pagina do IP do servidor e configurar a interface Web"
 echo
