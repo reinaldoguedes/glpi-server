@@ -30,7 +30,6 @@ echo ""
 echo "Criando os diretorios" 
 mkdir -p ~/mysql/
 mkdir -p ~/glpi/
-cd ~/glpi/
 echo ""
 sleep 5
 clear
@@ -40,18 +39,18 @@ echo "Fazendo download da aplicação do glpi 11.0.1"
 wget https://github.com/glpi-project/glpi/releases/download/11.0.1/glpi-11.0.1.tgz
 echo ""
 echo "Extraindo arquivos da Aplicação"
-tar -xzvf ~/glpi/glpi*.tgz
-mv ~/glpi/glpi/* ~/glpi/.
+tar -xzvf ~/glpi-server/glpi*.tgz
+mv ~/glpi-server/glpi/* ~/glpi/.
 echo ""
 echo "Aplicando permissões necessarias"
 chmod -R  777 ~/glpi/config/
 chmod -R  777 ~/glpi/files/
 chmod -R  777 ~/glpi/marketplace/
-rm -rf ~/glpi/glpi*
-cd ~/glpi-server/
+rm -rf ~/glpi-server/glpi*
+cd ~/glpi-server/web/
 echo ""
 echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
-docker-compose build
+docker-compose build 
 echo ""
 echo "Criando o Cluster GLPI"
 docker stack deploy --compose-file ~/glpi-server/docker-compose.yml up
