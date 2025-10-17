@@ -1,4 +1,5 @@
-#!/bin/bash
+!/bin/bash
+clear
 echo "###################################################################"
 echo "#                                                                 #"
 echo "#      - Sistema de Instalação dp Glpi em Cluster Docker  -       #"
@@ -12,48 +13,70 @@ echo ""
 echo " -* Preparando o Sistema para receber o Cluster GLPI *-"
 echo ""
 sleep 5
+clear
 echo "Atualizando a base e a estrutura do sistema operacional"
-apt-get update -y && apt-get upgrade -y
 echo ""
+sudo apt-get update -y && apt-get upgrade -y
+echo ""
+sleep 3
+clear
 echo "Instalando o docker"
-curl -fsSL https://get.docker.com/ | sh
-echo "" 
-echo "Testando o docker" 
-docker run hello-world
 echo ""
+sudo curl -fsSL https://get.docker.com/ | sh
+echo ""
+sleep 3
+clear
+echo "Testando o docker"
+echo ""
+sudo docker run hello-world
+echo ""
+sleep 3
+clear
 echo "Instalando o docker compose"
+echo ""
 sudo apt-get install docker-compose -y
 echo ""
+sleep 3
+clear
 echo "Inicializando o swarm do docker"
-docker swarm init
 echo ""
-echo "Criando os diretorios" 
-mkdir -p ~/mysql/
-mkdir -p ~/glpi/
+sudo docker swarm init
+sleep 3
+echo ""
+sleep 3
+clear
+echo "Criando Volumes do Container Webdir"
+echo ""
+sudo docker volume create glpi_webdir
 echo ""
 sleep 5
 clear
 echo " -* Iniciando as etapas da criação do cluster *-"
 echo ""
 echo "Fazendo download da aplicação do glpi 11.0.1"
+echo ""
 wget https://github.com/glpi-project/glpi/releases/download/11.0.1/glpi-11.0.1.tgz
 echo ""
 echo "Extraindo arquivos da Aplicação"
 tar -xzvf ~/glpi-server/glpi*.tgz
-mv ~/glpi-server/glpi/* ~/glpi/.
+sudo  ~/glpi-server/glpi/* /var/lib/docker/volumes/glpi_webdir/_data/.
 echo ""
 echo "Aplicando permissões necessarias"
-chmod -R  777 ~/glpi/config/
-chmod -R  777 ~/glpi/files/
-chmod -R  777 ~/glpi/marketplace/
-rm -rf ~/glpi-server/glpi*
-cd ~/glpi-server/web/
 echo ""
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/config/
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/files/
+sudo chmod -R  777 /var/lib/docker/volumes/glpi_webdir/_data/marketplace/
+sudo m -rf ~/glpi-server/glpi*
+cd ~/glpi-server/
 echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
-docker-compose build 
 echo ""
+sudo docker-compose build
+echo ""
+sleep 3
+clear
 echo "Criando o Cluster GLPI"
-docker stack deploy --compose-file ~/glpi-server/docker-compose.yml up
+echo ""
+sudo docker stack deploy --compose-file ~/glpi-server/docker-compose.yml glpi
 echo ""
 echo "Acessar a pagina do IP do servidor e configurar a interface Web"
 echo
