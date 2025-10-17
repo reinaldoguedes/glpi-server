@@ -1,28 +1,29 @@
-version: '3.3'
+
+version: '3.8'
 networks:
   backend:
-    driver:  
+    driver:
       overlay
 services:
-  mysql_glpi:
+  mysql:
     container_name: mysql_glpi
     image: mysql:8.0.22
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    privileged: true 
+    privileged: true
     deploy:
       replicas: 1
     volumes:
-      - '/home/darling/mysql:/var/lib/mysql'
+      - dbmysql:/var/lib/mysql
     environment:
       TZ : America/Manaus
-      MYSQL_ROOT_PASSWORD: 'Inf9ra5bas7e#hps'
+      MYSQL_ROOT_PASSWORD: '10Sup25orte#17'
       MYSQL_DATABASE: glpi-db
       MYSQL_USER: glpi-db-user
-      MYSQL_PASSWORD: 'Inf9ra5bas7e#hps-user'
+      MYSQL_PASSWORD: '10Sup25orte#17'
     networks:
-      - backend 
-  glpi_web:
+      - backend
+  web:
     container_name: glpi-server
     build: ./web/.
     image: server_server:latest
@@ -31,29 +32,32 @@ services:
     deploy:
       replicas: 3
     links:
-      - mysql_glpi
+      - mysql
     depends_on:
-      - mysql_glpi
+      - mysql
     volumes:
-    - /home/darling/glpi/:/var/www/html/   
+      - webdir:/var/www/html/
     ports:
       - "80:80"
       - "443:443"
     networks:
       - backend
-  glpi_phpmyadmin:
+  phpmyadmin:
     container_name: glpi_phpmyadmin
     image: phpmyadmin:latest
     restart: always
     deploy:
       replicas: 1
     depends_on:
-      - mysql_glpi
+      - mysql
     links:
-      - mysql_glpi
+      - mysql
     ports:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
     networks:
       - backend
+volumes:
+  dbmysql: {}
+  webdir: {}
