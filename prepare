@@ -8,7 +8,7 @@ wget https://github.com/glpi-project/glpi/releases/download/11.0.1/glpi-11.0.1.t
 echo ""
 echo "Extraindo arquivos da Aplicação"
 tar -xzvf ~/glpi-server/glpi*.tgz
-sudo mv  /home/$userdir/glpi-server/glpi/* /var/lib/docker/volumes/glpi_webdir/_data/.
+sudo mv  /home/$userdir/glpi-server/glpi/* /var/lib/docker/volumes/glpi_webdir/_data/
 echo ""
 echo "Aplicando permissões necessarias"
 echo ""
