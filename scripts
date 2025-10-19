@@ -1,3 +1,4 @@
+suporte@suporte:~/glpi-server$ cat scripts
 insta_docker (){
 echo "Para iniciar a instalacao, informe o usuario atual"
 read userdir
