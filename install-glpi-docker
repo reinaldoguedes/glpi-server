@@ -5,7 +5,7 @@
 source ./scripts
 source ./intro
 source ./prepare
-source ./createcluster
+source ./ccluster
 
 # Fazendo chamadas as funçoes
 
