@@ -11,17 +11,17 @@ services:
     restart: always
     privileged: true
     deploy:
-      replicas: 3
+      replicas: 1
     volumes:
       - dbmysql:/var/lib/mysql
-    ports:
-      - 3306:3306
+    expose:
+      - "3306"
     environment:
       TZ : America/Manaus
-      MYSQL_ROOT_PASSWORD: "@C4du2013#"
+      MYSQL_ROOT_PASSWORD: "17Sup320rte25"
       MYSQL_DATABASE: glpi-db
       MYSQL_USER: glpi-db-user
-      MYSQL_PASSWORD: "@C4du2013#"
+      MYSQL_PASSWORD: "17Sup320rte25"
     networks:
       - backend
   web:
