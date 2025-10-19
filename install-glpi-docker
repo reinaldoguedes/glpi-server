@@ -5,24 +5,11 @@
 source ./scripts
 source ./intro
 source ./prepare
+source ./createcluster
 
 # Fazendo chamadas as funçoes
 
 intro
 insta_docker
-prepcluster 
-
-
-
-echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
-echo ""
-sudo docker-compose build
-echo ""
-sleep 3
-clear
-echo "Criando o Cluster GLPI"
-echo ""
-sudo docker stack deploy --compose-file ~/glpi-server/docker-compose.yml glpi
-echo ""
-echo "Acessar a pagina do IP do servidor e configurar a interface Web"
-echo
+prepcluster
+ccluster
