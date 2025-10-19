@@ -34,6 +34,9 @@ clear
 echo "Inicializando o swarm do docker"
 echo ""
 sudo docker swarm init
+echo ""
+echo "Pressione uma tecla para continuar, caso tenha criado o cluster swarm"
+read testswarm
 sleep 3
 echo ""
 #sleep 3
