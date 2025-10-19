@@ -3,6 +3,8 @@ echo "Criando as imagens cluster GLPI - MYSQL - PHPADMIN"
 echo ""
 sudo docker pull mysql:8.0.22
 echo ""
+sudo docker pull phpmyadmin:latest
+echo ""
 sudo docker-compose build
 echo ""
 sleep 3
@@ -12,5 +14,11 @@ echo ""
 sudo docker stack deploy --compose-file ~/glpi-server/docker-compose.yml glpi
 echo ""
 echo "Acessar a pagina do IP do servidor e configurar a interface Web"
-echo
+echo ""
+sudo docker stack ls
+echo ""
+sudo docker service ls
+echo ""
+echo "Glpi em cluster docker instalado com sucesso!!!"
+echo ""
 }
