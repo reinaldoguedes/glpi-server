@@ -11,7 +11,7 @@ services:
     restart: always
     privileged: true
     deploy:
-      replicas: 1
+      replicas: 3
     volumes:
       - dbmysql:/var/lib/mysql
     ports:
