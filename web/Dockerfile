@@ -10,8 +10,8 @@ RUN apt-get update && apt upgrade -y \
                       php8.2-mbstring php8.2-mysqli php8.2-xml php8.2-intl php8.2-bz2 php8.2-zip php8.2-ldap php8.2-bcmath -y \
                       && echo "session.cookie_httponly=on" >> /etc/php/8.2/apache2/php.ini \
                       && a2enmod rewrite
-COPY chamados.visionclinica.local.conf /etc/apache2/sites-available/chamados.visionclinica.local.conf
+COPY chamados.visionclinica.com.br.conf /etc/apache2/sites-available/chamados.visionclinica.com.br.conf
 RUN a2dissite 000-default \
-&& a2ensite chamados.visionclinica.local.conf
+&& a2ensite chamados.visionclinica.com.br.conf
 EXPOSE 80
 CMD apachectl -D FOREGROUND
